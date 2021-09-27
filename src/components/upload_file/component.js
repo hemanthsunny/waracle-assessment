@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { UploadIcon, TrashIcon } from '@heroicons/react/outline'
+import { toast } from 'react-toastify'
 
 import { HeaderComponent } from 'components'
 import { SetUploadImages } from 'store/actions'
@@ -18,7 +19,9 @@ const UploadFileComponent = (props) => {
 
   const uploadImage = async (file) => {
     if (!file) {
-      alert('image is invalid')
+      toast.error('Invalid image. Try again!', {
+        position: toast.POSITION.TOP_RIGHT
+      })
       return null
     }
     var formData = new FormData()
@@ -29,6 +32,9 @@ const UploadFileComponent = (props) => {
     await props.bindUploadImages({
       url: 'images/upload',
       formData
+    })
+    toast.success('Successfully uploaded!', {
+      position: toast.POSITION.TOP_RIGHT
     })
   }
 
