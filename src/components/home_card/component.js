@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 
 import {
@@ -8,14 +8,30 @@ import {
   GetFavorites,
   RemoveFavorites,
   SetVotes,
-  GetVotes
+  GetVotes,
+  RemoveVotes
 } from 'store/actions'
 
 const HomeCardComponent = (props) => {
-  const [vote, setVote] = useState(props.votes && props.votes.find((v) => v.image_id === props.image.id))
-  const [favorite, setFavorite] = useState(props.favorites && props.favorites.find((v) => v.image_id === props.image.id))
+  const [vote, setVote] = useState('')
+  const [likeLen, setLikeLen] = useState(0)
+  const [dislikeLen, setDislikeLen] = useState(0)
+  const [favorite, setFavorite] = useState('')
+  const [refreshToken, setRefreshToken] = useState(true)
 
-  console.log('fav', favorite)
+  useEffect(() => {
+    if (refreshToken) {
+      props.bindGetFavorites({ url: 'favourites' })
+      props.bindGetVotes({ url: 'votes' })
+      setLikeLen(props.votes && props.votes.filter((v) => v.image_id === props.image.id && v.value === 1).length)
+      setDislikeLen(props.votes && props.votes.filter((v) => v.image_id === props.image.id && v.value === 0).length)
+      setVote(props.votes && props.votes.find((v) => v.image_id === props.image.id))
+      setFavorite(props.favorites && props.favorites.find((v) => v.image_id === props.image.id))
+      setRefreshToken(false)
+      console.log('kkkkk', likeLen, dislikeLen, vote, favorite)
+    }
+  })
+
   const addFavorite = (id) => {
     if (!id) {
       alert('Id is required')
@@ -31,12 +47,7 @@ const HomeCardComponent = (props) => {
         sub_id: 'User-123'
       }
     })
-
-    /*
-      Refresh the favourites
-    */
-    props.bindGetFavorites({ url: 'favourites' })
-    setFavorite(props.favorites && props.favorites.find((v) => v.image_id === props.image.id))
+    setRefreshToken(true)
   }
 
   const removeFavorite = (id) => {
@@ -50,12 +61,7 @@ const HomeCardComponent = (props) => {
     props.bindRemoveFavorites({
       url: `favourites/${id}`
     })
-
-    /*
-      Refresh the favourites
-    */
-    props.bindGetFavorites({ url: 'favourites' })
-    setFavorite('')
+    setRefreshToken(true)
   }
 
   const handleVoteUpDown = (id, value) => {
@@ -63,6 +69,7 @@ const HomeCardComponent = (props) => {
       alert('Id is required')
       return
     }
+    props.bindGetVotes({ url: 'votes' })
     /*
       Update the votes
     */
@@ -75,33 +82,60 @@ const HomeCardComponent = (props) => {
       }
     })
 
+    setRefreshToken(true)
+  }
+
+  const removeVote = () => {
+    if (!vote.id) {
+      alert('Vote id is required')
+      return
+    }
     /*
-      Refresh the votes
+      Update the votes
     */
-    props.bindGetVotes({ url: 'votes' })
-    setVote({ ...vote, value })
+    props.bindRemoveVotes({
+      url: `votes/${vote.id}`
+    })
+
+    setRefreshToken(true)
   }
 
   return (
-    <div className="relative w-40 h-40 overflow-hidden">
-      <img src={props.image.url} alt="Avatar" className="object-cover w-full h-full" />
-      <div className="absolute w-full py-2.5 bottom-0 inset-x-0 text-white text-xs text-center leading-4">
-        <div className="flex justify-center mt-6">
-          {
-            vote && vote.value === 1
-              ? <img src={require('assets/svgs/ThumbsUpDark.svg').default} alt="Avatar" className="w-6 h-6 object-cover" onClick={e => handleVoteUpDown(props.image.id, 1)} />
-              : <img src={require('assets/svgs/ThumbsUpLight.svg').default} alt="Avatar" className="w-6 h-6 object-cover" onClick={e => handleVoteUpDown(props.image.id, 1)} />
-          }
-          {
-            vote && vote.value === 0
-              ? <img src={require('assets/svgs/ThumbsDownDark.svg').default} alt="Avatar" className="w-6 h-6 object-cover" onClick={e => handleVoteUpDown(props.image.id, 0)} />
-              : <img src={require('assets/svgs/ThumbsDownLight.svg').default} alt="Avatar" className="w-6 h-6 object-cover" onClick={e => handleVoteUpDown(props.image.id, 0)} />
-          }
-          {
-            favorite
-              ? <img src={require('assets/svgs/StarDark.svg').default} alt="Avatar" className="w-6 h-6 object-cover" onClick={e => removeFavorite(favorite.id)} />
-              : <img src={require('assets/svgs/StarLight.svg').default} alt="Avatar" className="w-6 h-6 object-cover" onClick={e => addFavorite(props.image.id)} />
-          }
+    <div className="grid grid-flow-col auto-cols-max relative overflow-hidden">
+      <div className="card">
+        <img src={props.image.url} alt="Avatar" className="object-cover w-340 h-340 hover:scale-110" />
+        <div className="">
+          <div className="flex justify-between mx-3 my-3">
+            {
+              vote && vote.value === 1
+                ? <button className='flex bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded' onClick={removeVote}>
+                  <img src={require('assets/svgs/ThumbsUpDark.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-2" /> Like ({likeLen || 0})
+                </button>
+                : <button className='flex bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded' onClick={e => handleVoteUpDown(props.image.id, 1)}>
+                  <img src={require('assets/svgs/ThumbsUpLight.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-2" /> Like ({likeLen || 0})
+                </button>
+            }
+            {
+              vote && vote.value === 0
+                ? <button className='flex bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded' onClick={removeVote}>
+                  <img src={require('assets/svgs/ThumbsDownDark.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-2" style={{ marginTop: '3px' }} />Dislike ({dislikeLen || 0})
+                </button>
+                : <button className='flex bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded' onClick={e => handleVoteUpDown(props.image.id, 0)}>
+                  <img src={require('assets/svgs/ThumbsDownLight.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-2" style={{ marginTop: '3px' }} /> Dislike ({dislikeLen || 0})
+                </button>
+            }
+          </div>
+          <div className="text-right">
+            {
+              favorite
+                ? <button className='flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-28 rounded' onClick={e => removeFavorite(favorite.id)}>
+                  <img src={require('assets/svgs/StarDark.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-3" /> Unfavourite
+                </button>
+                : <button className='flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-28 rounded' onClick={e => addFavorite(props.image.id)}>
+                  <img src={require('assets/svgs/StarLight.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-3" /> Favourite
+                </button>
+            }
+          </div>
         </div>
       </div>
     </div>
@@ -123,7 +157,8 @@ const mapDispatchToProps = (dispatch) => {
     bindGetFavorites: (content) => dispatch(GetFavorites(content)),
     bindRemoveFavorites: (content) => dispatch(RemoveFavorites(content)),
     bindSetVotes: (content) => dispatch(SetVotes(content)),
-    bindGetVotes: (content) => dispatch(GetVotes(content))
+    bindGetVotes: (content) => dispatch(GetVotes(content)),
+    bindRemoveVotes: (content) => dispatch(RemoveVotes(content))
   }
 }
 

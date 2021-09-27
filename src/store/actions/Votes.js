@@ -55,7 +55,7 @@ export const SetVotes = (content) => {
   }
 }
 
-export const RemoveFavorites = (content) => {
+export const RemoveVotes = (content) => {
   return (dispatch) => {
     dispatch({
       type: SET_VOTES,
