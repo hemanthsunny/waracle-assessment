@@ -29,7 +29,6 @@ const HomeCardComponent = (props) => {
       setVote(props.votes && props.votes.find((v) => v.image_id === props.image.id))
       setFavorite(props.favorites && props.favorites.find((v) => v.image_id === props.image.id))
       setRefreshToken(false)
-      console.log('kkkkk', likeLen, dislikeLen, vote, favorite)
     }
   })
 
@@ -52,7 +51,7 @@ const HomeCardComponent = (props) => {
     })
     setRefreshToken(true)
     toast.success('Successfully added to your favorite', {
-      position: toast.POSITION.TOP_CENTER
+      position: toast.POSITION.TOP_RIGHT
     })
   }
 
@@ -124,37 +123,37 @@ const HomeCardComponent = (props) => {
   }
 
   return (
-    <div className="grid grid-flow-col auto-cols-max relative overflow-hidden">
+    <div className="grid grid-flow-col auto-cols-max relative overflow-hidden font-quicksand">
       <div className="card">
-        <img src={props.image.url} alt="Avatar" className="object-cover w-4/6 h-4/6 hover:scale-110" />
+        <img src={props.image.url} alt="Avatar" className="object-cover w-96 h-96 transform hover:scale-90 transition duration-500" />
         <div className="">
           <div className="flex justify-between mx-3 my-3">
             {
               vote && vote.value === 1
-                ? <button className='flex bg-green-500 hover:bg-green-700 duration-500 text-white font-bold py-2 px-4 rounded' onClick={removeVote}>
-                  <img src={require('assets/svgs/ThumbsUpDark.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-2" /> Like ({likeLen || 0})
+                ? <button className='flex bg-green-500 hover:bg-green-600 duration-500 text-white font-bold py-2 px-4 rounded' onClick={removeVote}>
+                  <img src={require('assets/svgs/ThumbsUpDark.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-2 transform hover:scale-125 duration-100" /> Like ({likeLen || 0})
                 </button>
-                : <button className='flex bg-green-500 hover:bg-green-700 duration-500 text-white font-bold py-2 px-4 rounded' onClick={e => handleVoteUpDown(props.image.id, 1)}>
-                  <img src={require('assets/svgs/ThumbsUpLight.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-2" /> Like ({likeLen || 0})
+                : <button className='flex bg-green-500 hover:bg-green-600 duration-500 text-white font-bold py-2 px-4 rounded transform active:scale-90' onClick={e => handleVoteUpDown(props.image.id, 1)}>
+                  <img src={require('assets/svgs/ThumbsUpLight.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-2 transform hover:scale-125 duration-100" /> Like ({likeLen || 0})
                 </button>
             }
             {
               vote && vote.value === 0
                 ? <button className='flex bg-red-500 hover:bg-red-700 duration-500 text-white font-bold py-2 px-4 rounded' onClick={removeVote}>
-                  <img src={require('assets/svgs/ThumbsDownDark.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-2" style={{ marginTop: '3px' }} />Dislike ({dislikeLen || 0})
+                  <img src={require('assets/svgs/ThumbsDownDark.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-2 transform hover:scale-125 duration-100" style={{ marginTop: '3px' }} />Dislike ({dislikeLen || 0})
                 </button>
                 : <button className='flex bg-red-500 hover:bg-red-700 duration-500 text-white font-bold py-2 px-4 rounded' onClick={e => handleVoteUpDown(props.image.id, 0)}>
-                  <img src={require('assets/svgs/ThumbsDownLight.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-2" style={{ marginTop: '3px' }} /> Dislike ({dislikeLen || 0})
+                  <img src={require('assets/svgs/ThumbsDownLight.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-2 transform hover:scale-125 duration-100" style={{ marginTop: '3px' }} /> Dislike ({dislikeLen || 0})
                 </button>
             }
           </div>
           <div className="text-right">
             {
               favorite
-                ? <button className='flex bg-blue-500 hover:bg-blue-700 duration-500 text-white font-bold py-2 px-28 rounded' onClick={e => removeFavorite(favorite.id)}>
-                  <img src={require('assets/svgs/StarDark.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-3" /> Unfavourite
+                ? <button className='flex bg-blue-500 hover:bg-blue-700 duration-500 text-white font-bold py-2 w-full rounded justify-center transform hover:scale-90 duration-10' onClick={e => removeFavorite(favorite.id)}>
+                  <img src={require('assets/svgs/StarDark.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-3 transform hover:scale-125 duration-100" /> Unfavourite
                 </button>
-                : <button className='flex bg-blue-500 hover:bg-blue-700 duration-500 text-white font-bold py-2 px-28 rounded' onClick={e => addFavorite(props.image.id)}>
+                : <button className='flex bg-blue-500 hover:bg-blue-700 duration-500 text-white font-bold py-2 w-full rounded justify-center transform hover:scale-90 duration-10' onClick={e => addFavorite(props.image.id)}>
                   <img src={require('assets/svgs/StarLight.svg').default} alt="Avatar" className="w-6 h-6 object-cover mr-3" /> Favourite
                 </button>
             }

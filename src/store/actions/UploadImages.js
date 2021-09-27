@@ -21,8 +21,20 @@ export const SetUploadImages = (content) => {
         type: SET_UPLOAD_IMAGES,
         payload: {
           uploadedImageResult: {
-            status: res.status,
+            status: res.code || 200,
             data: res.data
+          },
+          uploading: false
+        }
+      })
+    }).catch(err => {
+      err = err.toJSON()
+      dispatch({
+        type: SET_UPLOAD_IMAGES,
+        payload: {
+          uploadedImageResult: {
+            status: err.code || 500,
+            data: err.message
           },
           uploading: false
         }
