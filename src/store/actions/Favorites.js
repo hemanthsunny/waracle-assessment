@@ -32,6 +32,8 @@ export const SetFavorites = (content) => {
     dispatch({
       type: SET_FAVORITES,
       payload: {
+        favoritesResult: '',
+        favoritesError: '',
         favoriteInProgress: true
       }
     })
@@ -40,6 +42,10 @@ export const SetFavorites = (content) => {
       dispatch({
         type: SET_FAVORITES,
         payload: {
+          favoritesResult: {
+            status: res.status,
+            data: res.data
+          },
           newFavorite: res.data,
           favoriteInProgress: false
         }
@@ -61,6 +67,8 @@ export const RemoveFavorites = (content) => {
     dispatch({
       type: SET_FAVORITES,
       payload: {
+        favoritesResult: '',
+        favoritesError: '',
         favoriteInProgress: true
       }
     })
@@ -69,6 +77,11 @@ export const RemoveFavorites = (content) => {
       dispatch({
         type: SET_FAVORITES,
         payload: {
+          favoritesResult: {
+            status: res.status,
+            data: res.data
+          },
+          favoritesError: '',
           newFavorite: res.data,
           favoriteInProgress: false
         }
@@ -81,6 +94,18 @@ export const RemoveFavorites = (content) => {
           favoriteInProgress: false
         }
       })
+    })
+  }
+}
+
+export const RemoveFavoritesResult = (content) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_FAVORITES,
+      payload: {
+        favoritesResult: '',
+        favoritesError: ''
+      }
     })
   }
 }

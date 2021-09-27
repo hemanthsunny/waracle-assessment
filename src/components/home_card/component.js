@@ -8,9 +8,11 @@ import {
   SetFavorites,
   GetFavorites,
   RemoveFavorites,
+  RemoveFavoritesResult,
   SetVotes,
   GetVotes,
-  RemoveVotes
+  RemoveVotes,
+  RemoveVoteResult
 } from 'store/actions'
 
 const HomeCardComponent = (props) => {
@@ -18,29 +20,25 @@ const HomeCardComponent = (props) => {
   const [likeLen, setLikeLen] = useState(0)
   const [dislikeLen, setDislikeLen] = useState(0)
   const [favorite, setFavorite] = useState('')
-  const [refreshToken, setRefreshToken] = useState(true)
 
   useEffect(() => {
-    if (refreshToken) {
-      props.bindGetFavorites({ url: 'favourites' })
+    if (props.voteResult || !vote) {
       props.bindGetVotes({ url: 'votes' })
+      setVote(props.votes && props.votes.find((v) => v.image_id === props.image.id))
       setLikeLen(props.votes && props.votes.filter((v) => v.image_id === props.image.id && v.value === 1).length)
       setDislikeLen(props.votes && props.votes.filter((v) => v.image_id === props.image.id && v.value === 0).length)
-      setVote(props.votes && props.votes.find((v) => v.image_id === props.image.id))
+      setTimeout(() => {
+        props.bindRemoveVoteResult()
+      }, 2000)
+    }
+    if (props.favoritesResult || !favorite) {
+      props.bindGetFavorites({ url: 'favourites' })
       setFavorite(props.favorites && props.favorites.find((v) => v.image_id === props.image.id))
-      setRefreshToken(false)
+      setTimeout(() => {
+        props.bindRemoveFavoritesResult()
+      }, 2000)
     }
   })
-
-  const refreshData = () => {
-    props.bindGetFavorites({ url: 'favourites' })
-    props.bindGetVotes({ url: 'votes' })
-    setLikeLen(props.votes && props.votes.filter((v) => v.image_id === props.image.id && v.value === 1).length)
-    setDislikeLen(props.votes && props.votes.filter((v) => v.image_id === props.image.id && v.value === 0).length)
-    setVote(props.votes && props.votes.find((v) => v.image_id === props.image.id))
-    setFavorite(props.favorites && props.favorites.find((v) => v.image_id === props.image.id))
-    setRefreshToken(false)
-  }
 
   const addFavorite = (id) => {
     if (!id) {
@@ -59,11 +57,6 @@ const HomeCardComponent = (props) => {
         sub_id: 'User-123'
       }
     })
-    setRefreshToken(true)
-    refreshData()
-    toast.success('Successfully added to your favorite', {
-      position: toast.POSITION.TOP_RIGHT
-    })
   }
 
   const removeFavorite = (id) => {
@@ -78,11 +71,6 @@ const HomeCardComponent = (props) => {
     */
     props.bindRemoveFavorites({
       url: `favourites/${id}`
-    })
-    setRefreshToken(true)
-    refreshData()
-    toast.success('Successfully removed to your favorite', {
-      position: toast.POSITION.TOP_RIGHT
     })
   }
 
@@ -105,24 +93,13 @@ const HomeCardComponent = (props) => {
         sub_id: 'User-123'
       }
     })
-
-    setRefreshToken(true)
-    refreshData()
-    if (value === 1) {
-      toast.success('Hurray! You liked our Meow..', {
-        position: toast.POSITION.TOP_RIGHT
-      })
-    }
-    if (value === 0) {
-      toast.success('Sad! You disliked our Meow..', {
-        position: toast.POSITION.TOP_RIGHT
-      })
-    }
   }
 
   const removeVote = () => {
     if (!vote.id) {
-      alert('Vote id is required')
+      toast.error('Something went wrong. Try again later!', {
+        position: toast.POSITION.TOP_RIGHT
+      })
       return
     }
     /*
@@ -131,13 +108,10 @@ const HomeCardComponent = (props) => {
     props.bindRemoveVotes({
       url: `votes/${vote.id}`
     })
-
-    setRefreshToken(true)
-    refreshData()
   }
 
   return (
-    <div className="grid grid-flow-col auto-cols-max relative overflow-hidden font-quicksand">
+    <div className="grid grid-flow-col auto-cols-max relative overflow-hidden font-quicksand max-w-sm">
       <div className="card">
         <img src={props.image.url} alt="Avatar" className="object-cover w-96 h-96 transform hover:scale-90 transition duration-500" />
         <div className="">
@@ -180,9 +154,9 @@ const HomeCardComponent = (props) => {
 
 const mapStateToProps = (state) => {
   const { images, imagesError } = state.displayImages
-  const { votes, votesError } = state.votes
-  const { favorites, favoritesError } = state.favorites
-  return { images, imagesError, votes, votesError, favorites, favoritesError }
+  const { votes, votesError, voteResult } = state.votes
+  const { favorites, favoritesError, favoritesResult } = state.favorites
+  return { images, imagesError, votes, votesError, voteResult, favorites, favoritesError, favoritesResult }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -194,7 +168,9 @@ const mapDispatchToProps = (dispatch) => {
     bindRemoveFavorites: (content) => dispatch(RemoveFavorites(content)),
     bindSetVotes: (content) => dispatch(SetVotes(content)),
     bindGetVotes: (content) => dispatch(GetVotes(content)),
-    bindRemoveVotes: (content) => dispatch(RemoveVotes(content))
+    bindRemoveVotes: (content) => dispatch(RemoveVotes(content)),
+    bindRemoveVoteResult: (content) => dispatch(RemoveVoteResult(content)),
+    bindRemoveFavoritesResult: (content) => dispatch(RemoveFavoritesResult(content))
   }
 }
 

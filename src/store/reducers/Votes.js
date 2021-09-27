@@ -2,6 +2,7 @@ import { GET_VOTES, SET_VOTES } from '../types'
 
 const INITIAL_STATE = {
   votes: '',
+  voteResult: '',
   votesError: '',
   newFavorite: '',
   voteInProgress: false
@@ -21,6 +22,7 @@ const votes = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         voteInProgress: payload.voteInProgress,
+        voteResult: payload.voteResult,
         votesError: payload.votesError
       }
     }

@@ -32,14 +32,19 @@ export const SetVotes = (content) => {
     dispatch({
       type: SET_VOTES,
       payload: {
+        voteResult: '',
+        votesError: '',
         voteInProgress: true
       }
     })
-
     post(content.url, content.data).then((res) => {
       dispatch({
         type: SET_VOTES,
         payload: {
+          voteResult: {
+            status: res.status,
+            data: res.data
+          },
           voteInProgress: false
         }
       })
@@ -60,6 +65,8 @@ export const RemoveVotes = (content) => {
     dispatch({
       type: SET_VOTES,
       payload: {
+        voteResult: '',
+        votesError: '',
         voteInProgress: true
       }
     })
@@ -68,6 +75,10 @@ export const RemoveVotes = (content) => {
       dispatch({
         type: SET_VOTES,
         payload: {
+          voteResult: {
+            status: res.status,
+            data: res.data
+          },
           voteInProgress: false
         }
       })
@@ -79,6 +90,18 @@ export const RemoveVotes = (content) => {
           voteInProgress: false
         }
       })
+    })
+  }
+}
+
+export const RemoveVoteResult = (content) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_VOTES,
+      payload: {
+        voteResult: '',
+        voteError: ''
+      }
     })
   }
 }

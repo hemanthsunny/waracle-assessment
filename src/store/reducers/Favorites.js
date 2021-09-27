@@ -3,6 +3,7 @@ import { GET_FAVORITES, SET_FAVORITES } from '../types'
 const INITIAL_STATE = {
   favorites: '',
   favoritesError: '',
+  favoritesResult: '',
   newFavorite: '',
   favoriteInProgress: false
 }
@@ -22,7 +23,8 @@ const favorites = (state = INITIAL_STATE, action) => {
         ...state,
         newFavorite: payload.newFavorite,
         favoriteInProgress: payload.favoriteInProgress,
-        favoritesError: payload.favoritesError
+        favoritesError: payload.favoritesError,
+        favoritesResult: payload.favoritesResult
       }
     }
     default:
