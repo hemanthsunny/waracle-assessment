@@ -32,6 +32,16 @@ const HomeCardComponent = (props) => {
     }
   })
 
+  const refreshData = () => {
+    props.bindGetFavorites({ url: 'favourites' })
+    props.bindGetVotes({ url: 'votes' })
+    setLikeLen(props.votes && props.votes.filter((v) => v.image_id === props.image.id && v.value === 1).length)
+    setDislikeLen(props.votes && props.votes.filter((v) => v.image_id === props.image.id && v.value === 0).length)
+    setVote(props.votes && props.votes.find((v) => v.image_id === props.image.id))
+    setFavorite(props.favorites && props.favorites.find((v) => v.image_id === props.image.id))
+    setRefreshToken(false)
+  }
+
   const addFavorite = (id) => {
     if (!id) {
       toast.error('Something went wrong. Try again later!', {
@@ -50,6 +60,7 @@ const HomeCardComponent = (props) => {
       }
     })
     setRefreshToken(true)
+    refreshData()
     toast.success('Successfully added to your favorite', {
       position: toast.POSITION.TOP_RIGHT
     })
@@ -69,6 +80,7 @@ const HomeCardComponent = (props) => {
       url: `favourites/${id}`
     })
     setRefreshToken(true)
+    refreshData()
     toast.success('Successfully removed to your favorite', {
       position: toast.POSITION.TOP_RIGHT
     })
@@ -95,6 +107,7 @@ const HomeCardComponent = (props) => {
     })
 
     setRefreshToken(true)
+    refreshData()
     if (value === 1) {
       toast.success('Hurray! You liked our Meow..', {
         position: toast.POSITION.TOP_RIGHT
@@ -120,6 +133,7 @@ const HomeCardComponent = (props) => {
     })
 
     setRefreshToken(true)
+    refreshData()
   }
 
   return (
