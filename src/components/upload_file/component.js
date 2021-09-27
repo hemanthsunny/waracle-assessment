@@ -44,7 +44,7 @@ const UploadFileComponent = (props) => {
       return null
     }
     console.log('selectImage', selectedImage, props.uploading)
-    var formData = new FormData()
+    const formData = new FormData()
     formData.append('file', selectedImage)
     formData.append('sub_id', 'User-123')
     await props.bindUploadImages({
