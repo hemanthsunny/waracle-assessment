@@ -81,23 +81,30 @@ const UploadFileComponent = (props) => {
                         alt='Cat img'
                         className='w-80 h-80 py-6 object-contain'
                       />
-                      <div className="">
-                        <button className='flex bg-green-500 hover:bg-green-700 duration-500 text-white font-bold py-2 px-4 rounded my-3' onClick={uploadImage} disabled={props.loading}>
-                          <UploadIcon className="block h-6 w-6 mr-2" aria-hidden="true" />
-                          {
-                            props.uploading ? <span>Uploading</span> : <span>Upload image</span>
-                          }
-                        </button>
-                        <button className='flex bg-red-500 hover:bg-red-700 duration-500 text-white font-bold py-2 px-4 rounded' onClick={removeSelectedImage}>
-                          <TrashIcon className="block h-6 w-6 mr-2" aria-hidden="true" /> Remove
-                        </button>
-                      </div>
+                      {
+                        props.uploading
+                          ? <div className="">
+                            <button className='flex bg-green-500 hover:bg-green-700 duration-500 text-white font-bold py-2 px-4 rounded my-3' disabled>
+                              <UploadIcon className='block h-6 w-6 mr-2 animate-bounce' aria-hidden="true" />
+                              Uploading...
+                            </button>
+                          </div>
+                          : <div className="">
+                            <button className='flex bg-green-500 hover:bg-green-700 duration-500 text-white font-bold py-2 px-4 rounded my-3' onClick={uploadImage} disabled={props.loading}>
+                              <UploadIcon className='block h-6 w-6 mr-2' aria-hidden="true" />
+                              <span>Upload image</span>
+                            </button>
+                            <button className='flex bg-red-500 hover:bg-red-700 duration-500 text-white font-bold py-2 px-4 rounded' onClick={removeSelectedImage}>
+                              <TrashIcon className="block h-6 w-6 mr-2" aria-hidden="true" /> Remove
+                            </button>
+                          </div>
+                        }
                     </div>
                     )
                   : (
                     <div className="flex justify-center mt-6">
                       <label className="w-64 flex flex-col items-center px-4 py-6 bg-white rounded-md shadow-md tracking-wide uppercase border border-blue cursor-pointer hover:bg-purple-600 hover:font-bold text-purple-600 ease-linear transition-all duration-150">
-                          <UploadIcon className="block h-8 w-8 mr-2" aria-hidden="true" />
+                          <UploadIcon className="block h-8 w-8 mr-2 animate-bounce" aria-hidden="true" />
                         <span className="mt-3 text-base font-light leading-normal">Select a cat image</span>
                         <input type='file' className="hidden" onChange={e => selectImage(e.target.files[0])} accept='image/*' />
                       </label>
