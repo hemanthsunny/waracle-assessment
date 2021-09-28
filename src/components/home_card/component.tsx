@@ -15,19 +15,47 @@ import {
   RemoveVoteResult
 } from 'store/actions'
 
-const HomeCardComponent = (props) => {
-  const [vote, setVote] = useState('')
+interface Props {
+  voteResult: string,
+  bindGetFavorites: Function,
+  votes: any[],
+  image: {
+    id: string,
+    url: string
+  },
+  bindRemoveVoteResult: Function,
+  bindGetVotes: Function,
+  bindSetVotes: Function,
+  bindRemoveVotes: Function,
+  favoritesResult: any,
+  favorites: any[],
+  bindRemoveFavoritesResult: Function,
+  bindSetFavorites: Function,
+  bindRemoveFavorites: Function
+}
+
+interface Vote {
+  id: string,
+  value: number
+}
+
+interface Favorite {
+  id: any
+}
+
+const HomeCardComponent = (props: Props) => {
+  const [vote, setVote] = useState<Vote>({ id: '', value: 2 })
   const [likeLen, setLikeLen] = useState(0)
   const [dislikeLen, setDislikeLen] = useState(0)
-  const [favorite, setFavorite] = useState('')
+  const [favorite, setFavorite] = useState<Favorite>({ id: '' })
 
   useEffect(() => {
     if (props.voteResult || !vote) {
       props.bindGetVotes({ url: 'votes' })
-      setVote(props.votes && props.votes.find((v) => v.image_id === props.image.id))
-      setLikeLen(props.votes && props.votes.filter((v) => v.image_id === props.image.id && v.value === 1).length)
-      setDislikeLen(props.votes && props.votes.filter((v) => v.image_id === props.image.id && v.value === 0).length)
       setTimeout(() => {
+        setVote(props.votes && props.votes.find((v) => v.image_id === props.image.id))
+        setLikeLen(props.votes && props.votes.filter((v) => v.image_id === props.image.id && v.value === 1).length)
+        setDislikeLen(props.votes && props.votes.filter((v) => v.image_id === props.image.id && v.value === 0).length)
         props.bindRemoveVoteResult()
       }, 2000)
     }
@@ -40,7 +68,7 @@ const HomeCardComponent = (props) => {
     }
   })
 
-  const addFavorite = (id) => {
+  const addFavorite = (id: string) => {
     if (!id) {
       toast.error('Something went wrong. Try again later!', {
         position: toast.POSITION.TOP_RIGHT
@@ -59,7 +87,7 @@ const HomeCardComponent = (props) => {
     })
   }
 
-  const removeFavorite = (id) => {
+  const removeFavorite = (id: string) => {
     if (!id) {
       toast.error('Something went wrong. Try again later!', {
         position: toast.POSITION.TOP_RIGHT
@@ -74,7 +102,7 @@ const HomeCardComponent = (props) => {
     })
   }
 
-  const handleVoteUpDown = (id, value) => {
+  const handleVoteUpDown = (id: string, value: number) => {
     if (!id) {
       toast.error('Something went wrong. Try again later!', {
         position: toast.POSITION.TOP_RIGHT
@@ -152,25 +180,25 @@ const HomeCardComponent = (props) => {
   )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
   const { images, imagesError } = state.displayImages
   const { votes, votesError, voteResult } = state.votes
   const { favorites, favoritesError, favoritesResult } = state.favorites
   return { images, imagesError, votes, votesError, voteResult, favorites, favoritesError, favoritesResult }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    bindDisplayImages: (content) => dispatch(SetDisplayImages(content)),
-    bindUploadedResult: (content) => dispatch(SetUploadedResult(content)),
-    bindSetFavorites: (content) => dispatch(SetFavorites(content)),
-    bindGetFavorites: (content) => dispatch(GetFavorites(content)),
-    bindRemoveFavorites: (content) => dispatch(RemoveFavorites(content)),
-    bindSetVotes: (content) => dispatch(SetVotes(content)),
-    bindGetVotes: (content) => dispatch(GetVotes(content)),
-    bindRemoveVotes: (content) => dispatch(RemoveVotes(content)),
-    bindRemoveVoteResult: (content) => dispatch(RemoveVoteResult(content)),
-    bindRemoveFavoritesResult: (content) => dispatch(RemoveFavoritesResult(content))
+    bindDisplayImages: (content: any) => dispatch(SetDisplayImages(content)),
+    bindUploadedResult: (content: any) => dispatch(SetUploadedResult(content)),
+    bindSetFavorites: (content: any) => dispatch(SetFavorites(content)),
+    bindGetFavorites: (content: any) => dispatch(GetFavorites(content)),
+    bindRemoveFavorites: (content: any) => dispatch(RemoveFavorites(content)),
+    bindSetVotes: (content: any) => dispatch(SetVotes(content)),
+    bindGetVotes: (content: any) => dispatch(GetVotes(content)),
+    bindRemoveVotes: (content: any) => dispatch(RemoveVotes(content)),
+    bindRemoveVoteResult: (content: any) => dispatch(RemoveVoteResult(content)),
+    bindRemoveFavoritesResult: (content: any) => dispatch(RemoveFavoritesResult(content))
   }
 }
 

@@ -15,11 +15,15 @@ const userNavigation = [
   { name: 'Sign out', href: '#' }
 ]
 
-function classNames (...classes) {
+function classNames (...classes: any) {
   return classes.filter(Boolean).join(' ')
 }
 
-const HeaderComponent = ({ path }) => {
+type Props = {
+  path: string
+}
+
+const HeaderComponent = ({ path }: Props) => {
   const [navBarOptions, setNavBarOptions] = useState([
     { name: 'Home', href: '/', current: true },
     { name: 'Upload', href: '/upload', current: false }

@@ -11,7 +11,16 @@ import {
   GetVotes
 } from 'store/actions'
 
-const HomeComponent = (props) => {
+interface Props {
+  images: Array<any>,
+  bindUploadedResult: Function,
+  bindDisplayImages: Function,
+  bindGetFavorites: Function,
+  bindGetVotes: Function,
+  imagesError: {message: string}
+}
+
+const HomeComponent = (props: Props) => {
   useEffect(() => {
     if (!props.images[0]) {
       props.bindUploadedResult('')
@@ -48,21 +57,21 @@ const HomeComponent = (props) => {
   )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
   const { images, imagesError } = state.displayImages
   const { votes, votesError } = state.votes
   const { favorites, favoritesError } = state.favorites
   return { images, imagesError, votes, votesError, favorites, favoritesError }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Function) => {
   return {
-    bindDisplayImages: (content) => dispatch(SetDisplayImages(content)),
-    bindUploadedResult: (content) => dispatch(SetUploadedResult(content)),
-    bindSetFavorites: (content) => dispatch(SetFavorites(content)),
-    bindGetFavorites: (content) => dispatch(GetFavorites(content)),
-    bindSetVotes: (content) => dispatch(SetVotes(content)),
-    bindGetVotes: (content) => dispatch(GetVotes(content))
+    bindDisplayImages: (content: any) => dispatch(SetDisplayImages(content)),
+    bindUploadedResult: (content: any) => dispatch(SetUploadedResult(content)),
+    bindSetFavorites: (content: any) => dispatch(SetFavorites(content)),
+    bindGetFavorites: (content: any) => dispatch(GetFavorites(content)),
+    bindSetVotes: (content: any) => dispatch(SetVotes(content)),
+    bindGetVotes: (content: any) => dispatch(GetVotes(content))
   }
 }
 
