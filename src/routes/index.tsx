@@ -6,7 +6,7 @@ import {
   HomeComponent
 } from 'components'
 
-export const Routes = (props) => {
+export const Routes = (props: any) => {
   const location = useLocation()
   return (
     <Switch location={location} key={location.pathname}>

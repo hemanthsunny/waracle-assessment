@@ -8,7 +8,7 @@ const INITIAL_STATE = {
   favoriteInProgress: false
 }
 
-const favorites = (state = INITIAL_STATE, action) => {
+const favorites = (state = INITIAL_STATE, action: any) => {
   const { payload } = action
   switch (action.type) {
     case GET_FAVORITES: {

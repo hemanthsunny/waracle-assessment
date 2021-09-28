@@ -50,7 +50,7 @@ const HomeCardComponent = (props: Props) => {
   const [favorite, setFavorite] = useState<Favorite>({ id: '' })
 
   useEffect(() => {
-    if (props.voteResult || !vote) {
+    if (props.voteResult || !vote || !vote.id) {
       props.bindGetVotes({ url: 'votes' })
       setTimeout(() => {
         setVote(props.votes && props.votes.find((v) => v.image_id === props.image.id))
@@ -59,7 +59,7 @@ const HomeCardComponent = (props: Props) => {
         props.bindRemoveVoteResult()
       }, 2000)
     }
-    if (props.favoritesResult || !favorite) {
+    if (props.favoritesResult || !favorite || !favorite.id) {
       props.bindGetFavorites({ url: 'favourites' })
       setFavorite(props.favorites && props.favorites.find((v) => v.image_id === props.image.id))
       setTimeout(() => {

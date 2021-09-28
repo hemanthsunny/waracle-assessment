@@ -7,8 +7,13 @@ import {
   SET_VOTES
 } from 'store/types'
 
-export const GetVotes = (content) => {
-  return (dispatch) => {
+interface Content {
+  url: string,
+  data: any
+}
+
+export const GetVotes = (content: Content) => {
+  return (dispatch: Function) => {
     get(content.url, content.data).then((res) => {
       dispatch({
         type: GET_VOTES,
@@ -27,8 +32,8 @@ export const GetVotes = (content) => {
   }
 }
 
-export const SetVotes = (content) => {
-  return (dispatch) => {
+export const SetVotes = (content: any) => {
+  return (dispatch: Function) => {
     dispatch({
       type: SET_VOTES,
       payload: {
@@ -60,8 +65,8 @@ export const SetVotes = (content) => {
   }
 }
 
-export const RemoveVotes = (content) => {
-  return (dispatch) => {
+export const RemoveVotes = (content: any) => {
+  return (dispatch: Function) => {
     dispatch({
       type: SET_VOTES,
       payload: {
@@ -94,8 +99,8 @@ export const RemoveVotes = (content) => {
   }
 }
 
-export const RemoveVoteResult = (content) => {
-  return (dispatch) => {
+export const RemoveVoteResult = (content: any) => {
+  return (dispatch: Function) => {
     dispatch({
       type: SET_VOTES,
       payload: {

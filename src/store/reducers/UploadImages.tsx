@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   uploadedImageResult: ''
 }
 
-const uploadImages = (state = INITIAL_STATE, action) => {
+const uploadImages = (state = INITIAL_STATE, action: any) => {
   const { payload } = action
   switch (action.type) {
     case SET_UPLOAD_IMAGES: {

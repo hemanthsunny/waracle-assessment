@@ -8,7 +8,7 @@ const INITIAL_STATE = {
   voteInProgress: false
 }
 
-const votes = (state = INITIAL_STATE, action) => {
+const votes = (state = INITIAL_STATE, action: any) => {
   const { payload } = action
   switch (action.type) {
     case GET_VOTES: {

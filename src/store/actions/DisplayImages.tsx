@@ -5,8 +5,13 @@ import {
   SET_DISPLAY_IMAGES_ERROR
 } from 'store/types'
 
-export const SetDisplayImages = (content) => {
-  return (dispatch) => {
+interface Content {
+  url: string,
+  data: any
+}
+
+export const SetDisplayImages = (content: Content) => {
+  return (dispatch: any) => {
     get(content.url, content.data).then((res) => {
       dispatch({
         type: SET_DISPLAY_IMAGES,

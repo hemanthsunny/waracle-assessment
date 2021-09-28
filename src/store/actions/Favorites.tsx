@@ -7,8 +7,13 @@ import {
   SET_FAVORITES
 } from 'store/types'
 
-export const GetFavorites = (content) => {
-  return (dispatch) => {
+interface Content {
+  url: string,
+  data: any
+}
+
+export const GetFavorites = (content: Content) => {
+  return (dispatch: Function) => {
     get(content.url, content.data).then((res) => {
       dispatch({
         type: GET_FAVORITES,
@@ -27,8 +32,8 @@ export const GetFavorites = (content) => {
   }
 }
 
-export const SetFavorites = (content) => {
-  return (dispatch) => {
+export const SetFavorites = (content: any) => {
+  return (dispatch: Function) => {
     dispatch({
       type: SET_FAVORITES,
       payload: {
@@ -62,8 +67,8 @@ export const SetFavorites = (content) => {
   }
 }
 
-export const RemoveFavorites = (content) => {
-  return (dispatch) => {
+export const RemoveFavorites = (content: any) => {
+  return (dispatch: Function) => {
     dispatch({
       type: SET_FAVORITES,
       payload: {
@@ -98,8 +103,8 @@ export const RemoveFavorites = (content) => {
   }
 }
 
-export const RemoveFavoritesResult = (content) => {
-  return (dispatch) => {
+export const RemoveFavoritesResult = (content: any) => {
+  return (dispatch: Function) => {
     dispatch({
       type: SET_FAVORITES,
       payload: {

@@ -5,7 +5,7 @@ const INITIAL_STATE = {
   imagesError: ''
 }
 
-const displayImages = (state = INITIAL_STATE, action) => {
+const displayImages = (state = INITIAL_STATE, action: any) => {
   const { payload } = action
   switch (action.type) {
     case SET_DISPLAY_IMAGES: {

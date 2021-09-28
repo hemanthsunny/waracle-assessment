@@ -4,8 +4,13 @@ import {
   SET_UPLOAD_IMAGES
 } from 'store/types'
 
-export const SetUploadImages = (content) => {
-  return (dispatch) => {
+interface Content {
+  url: string,
+  formData: any
+}
+
+export const SetUploadImages = (content: Content) => {
+  return (dispatch: Function) => {
     dispatch({
       type: SET_UPLOAD_IMAGES,
       payload: {
@@ -21,8 +26,10 @@ export const SetUploadImages = (content) => {
         type: SET_UPLOAD_IMAGES,
         payload: {
           uploadedImageResult: {
-            status: res.code || 200,
-            data: res.data
+            status: 200,
+            data: {
+              message: 'Successful'
+            }
           },
           uploading: false
         }
@@ -43,8 +50,8 @@ export const SetUploadImages = (content) => {
   }
 }
 
-export const SetUploadedResult = (content) => {
-  return (dispatch) => {
+export const SetUploadedResult = (content: any) => {
+  return (dispatch: Function) => {
     dispatch({
       type: SET_UPLOAD_IMAGES,
       payload: {
