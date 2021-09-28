@@ -7,7 +7,13 @@ import { toast } from 'react-toastify'
 import { HeaderComponent } from 'components'
 import { SetUploadImages } from 'store/actions'
 
-const UploadFileComponent = (props) => {
+interface Props {
+  uploadedImageResult: any,
+  bindUploadImages: Function,
+  uploading: boolean,
+}
+
+const UploadFileComponent = (props: Props) => {
   const [selectedImage, setSelectedImage] = useState('')
   const history = useHistory()
 
@@ -26,7 +32,7 @@ const UploadFileComponent = (props) => {
     }
   })
 
-  const selectImage = async (file) => {
+  const selectImage = async (file: any) => {
     if (!file) {
       toast.error('Invalid image. Try again!', {
         position: toast.POSITION.TOP_RIGHT
@@ -43,7 +49,7 @@ const UploadFileComponent = (props) => {
       })
       return null
     }
-    console.log('selectImage', selectedImage, props.uploading)
+
     const formData = new FormData()
     formData.append('file', selectedImage)
     formData.append('sub_id', 'User-123')
@@ -90,7 +96,7 @@ const UploadFileComponent = (props) => {
                             </button>
                           </div>
                           : <div className="">
-                            <button className='flex bg-green-500 hover:bg-green-700 duration-500 text-white font-bold py-2 px-4 rounded my-3' onClick={uploadImage} disabled={props.loading}>
+                            <button className='flex bg-green-500 hover:bg-green-700 duration-500 text-white font-bold py-2 px-4 rounded my-3' onClick={uploadImage} disabled={props.uploading}>
                               <UploadIcon className='block h-6 w-6 mr-2' aria-hidden="true" />
                               <span>Upload image</span>
                             </button>
@@ -106,7 +112,7 @@ const UploadFileComponent = (props) => {
                       <label className="w-64 flex flex-col items-center px-4 py-6 bg-white rounded-md shadow-md tracking-wide uppercase border border-blue cursor-pointer hover:bg-purple-600 hover:font-bold text-purple-600 ease-linear transition-all duration-150">
                           <UploadIcon className="block h-8 w-8 mr-2 animate-bounce" aria-hidden="true" />
                         <span className="mt-3 text-base font-light leading-normal">Select a cat image</span>
-                        <input type='file' className="hidden" onChange={e => selectImage(e.target.files[0])} accept='image/*' />
+                        <input type='file' className="hidden" onChange={e => selectImage(e.target.files && e.target.files[0])} accept='image/*' />
                       </label>
                     </div>
                     )
@@ -120,14 +126,14 @@ const UploadFileComponent = (props) => {
   )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
   const { uploading, uploadedImageResult } = state.uploadImages
   return { uploading, uploadedImageResult }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    bindUploadImages: (content) => dispatch(SetUploadImages(content))
+    bindUploadImages: (content: any) => dispatch(SetUploadImages(content))
   }
 }
 
