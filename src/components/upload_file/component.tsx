@@ -40,6 +40,7 @@ const UploadFileComponent = (props: Props) => {
       return null
     }
     setSelectedImage(file)
+    return null
   }
 
   const uploadImage = async () => {
@@ -57,6 +58,7 @@ const UploadFileComponent = (props: Props) => {
       url: 'images/upload',
       formData
     })
+    return null
   }
 
   const removeSelectedImage = () => {
