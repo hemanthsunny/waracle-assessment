@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import { HeaderComponent } from 'components'
 import { SetUploadImages } from 'store/actions'
 
-interface Props {
+export interface Props {
   uploadedImageResult: any,
   bindUploadImages: Function,
   uploading: boolean,
